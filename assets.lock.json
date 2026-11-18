@@ -1,0 +1,83 @@
+{
+  "files": [
+    {
+      "group": "sensevoice",
+      "path": "orangepi_cpu/model.int8.onnx",
+      "bytes": 239233841,
+      "sha256": "c71f0ce00bec95b07744e116345e33d8cbbe08cef896382cf907bf4b51a2cd51"
+    },
+    {
+      "group": "sensevoice",
+      "path": "orangepi_cpu/tokens.txt",
+      "bytes": 315894,
+      "sha256": "f449eb28dc567533d7fa59be34e2abca8784f771850c78a47fb731a31429a1dc"
+    },
+    {
+      "group": "sensevoice",
+      "path": "orangepi_cpu/manifest.json",
+      "bytes": 708,
+      "sha256": "867c3907883dfac9c009f7c1260d48a1c74ec5944ff6d572734edf205927e076"
+    },
+    {
+      "group": "rbt3",
+      "path": "orangepi_baseline/manifest.json",
+      "bytes": 1073,
+      "sha256": "aa0a8b30cf0b276e139f1e7dd7f2f01f7ae5f1cb0f7c99728c44c25193dd7d8a"
+    },
+    {
+      "group": "rbt3",
+      "path": "orangepi_baseline/rbt3_finetuned/model.safetensors",
+      "bytes": 153919872,
+      "sha256": "ee6b34079e08f308b00ff8e50340c9e7c11c8f6cec3a20a18da14198f90cefb1"
+    },
+    {
+      "group": "rbt3",
+      "path": "orangepi_baseline/rbt3_finetuned/config.json",
+      "bytes": 999,
+      "sha256": "766d0006bb0e0e91306aae1ed9e3211d0cf9f6fece275f27d1330cd44f57332a"
+    },
+    {
+      "group": "rbt3",
+      "path": "orangepi_baseline/rbt3_finetuned/tokenizer.json",
+      "bytes": 439387,
+      "sha256": "c9c9a74e179a68973f69f4d9dc6245c3563b350dffa313f29b875ce9619e99c9"
+    },
+    {
+      "group": "rbt3",
+      "path": "orangepi_baseline/rbt3_finetuned/tokenizer_config.json",
+      "bytes": 1305,
+      "sha256": "75a743f7397bf8e240ac050a98e85084af163f8d2cc175448e793897e2f67225"
+    },
+    {
+      "group": "rbt3",
+      "path": "orangepi_baseline/rbt3_finetuned/special_tokens_map.json",
+      "bytes": 732,
+      "sha256": "5aa43c2f985a25296d5a5ce621c2f77376ca8091a47993c492fd5460b895b140"
+    },
+    {
+      "group": "rbt3",
+      "path": "orangepi_baseline/rbt3_finetuned/vocab.txt",
+      "bytes": 109540,
+      "sha256": "45bbac6b341c319adc98a532532882e91a9cefc0329aa57bac9ae761c27b291c"
+    },
+    {
+      "group": "qwen",
+      "path": "qwen35_cpu_test/clean_v2_20261117_102215/qwen35_2b_finetuned-Q8_0.gguf",
+      "bytes": 2012012128,
+      "sha256": "415e7a97c4b68ab42e6494d4c17bef887217632e644a206ee61408f2e0bcca98"
+    },
+    {
+      "group": "runtime",
+      "path": "qwen35_cpu_test/runtime/llama.cpp-aa75ff323/build-arm64/bin/llama-server",
+      "bytes": 15401840,
+      "sha256": "66b47ab23dee1c262866c1848947dc6ddce025580d4a177290fe2e70585446e4"
+    },
+    {
+      "group": "runtime",
+      "path": "qwen35_cpu_test/runtime/llama.cpp-aa75ff323/LICENSE",
+      "bytes": 1078,
+      "sha256": "94f29bbed6a22c35b992c5c6ebf0e7c92f13b836b90f36f461c9cf2f0f1d010d"
+    }
+  ],
+  "qwen_sha256": "415e7a97c4b68ab42e6494d4c17bef887217632e644a206ee61408f2e0bcca98"
+}

@@ -1,0 +1,81 @@
+{
+  "status": "source_mirrors_verified_against_running_board_export_20261118",
+  "files": {
+    "edge/campus_risk_deploy/common.py": {
+      "sha256": "26d3ae7bfa1d39206b479f5954b5c68fd792fe6164192967227d3fcf7f04de7a",
+      "origin": "verified_deployment_with_applied_0715_patch"
+    },
+    "edge/campus_risk_deploy/decision.py": {
+      "sha256": "55fc13a5f12e659412e767f2984bceaf7d9c2ba1c7152e0585227e7e54d56c2c",
+      "origin": "verified_deployment_with_applied_0715_patch"
+    },
+    "edge/campus_risk_deploy/edge_service.py": {
+      "sha256": "ad045772b093ee124bab9f8b6a7cf6c3033681ae68c1ac20468c62a2198f49c5",
+      "origin": "verified_deployment_with_applied_0715_patch"
+    },
+    "edge/campus_risk_deploy/qwen_runtime.py": {
+      "sha256": "8ca4c30e516bc472435c777f9c467c1bf1fb18fcd60add046d2c31074d474c0a",
+      "origin": "verified_deployment_with_applied_0715_patch"
+    },
+    "edge/campus_risk_deploy/qwen_system_prompt.txt": {
+      "sha256": "8a942264ffd2a3a1292e0aa1d7bfd5f44927f61702f7f898e7e5d7b572ed3774",
+      "origin": "verified_deployment_with_applied_0715_patch"
+    },
+    "edge/campus_risk_deploy/check_edge.py": {
+      "sha256": "77b7de92e45ff2adc7805c1490a203b69aa3e2805af17c4cfca95f76d3af9c4a",
+      "origin": "verified_deployment_with_applied_0715_patch"
+    },
+    "edge/campus_risk_deploy/capture/capture.py": {
+      "sha256": "848c1fa328f91457edf47ede4b46f723c92337090a6b1d3d24d6ae2d0e4a27e8",
+      "origin": "verified_deployment_with_applied_0715_patch"
+    },
+    "edge/campus_risk_deploy/capture/auto_protocol.py": {
+      "sha256": "26b452d618be66327fc874e5e802299c0fc5b61bcd81c88efbe13b26bc3f073c",
+      "origin": "verified_deployment_with_applied_0715_patch"
+    },
+    "edge/campus_risk_deploy/capture/reliable_usb.py": {
+      "sha256": "f879f72c1014933047c55e44857714db7e15f98a054763eb17438ca1a57bb492",
+      "origin": "verified_deployment_with_applied_0715_patch"
+    },
+    "edge/campus_risk_deploy/capture/host_health.py": {
+      "sha256": "2ebc1d6aae11b9c32d7bfbec5d1c5157c6484d6407456f0f037321e2d677f407",
+      "origin": "verified_deployment_with_applied_0715_patch"
+    },
+    "edge/campus_risk_deploy/capture/auto_inference.py": {
+      "sha256": "331123ca810d9961aee5546b6fc631a2c268edb4c234b988fa0fd1cafd0a6281",
+      "origin": "verified_deployment_with_applied_0715_patch"
+    },
+    "edge/campus_risk_deploy/capture/qwen_inference.py": {
+      "sha256": "74bb9af678a9c5aa1a1713832caaaf1cbac35aca88d1a92c8bbec49193b3b372",
+      "origin": "verified_deployment_with_applied_0715_patch"
+    },
+    "center/center.py": {
+      "sha256": "003e69904aaca8fa9b9caaa519e1f900b14daef8917ad7e6b99c55e16ede646a",
+      "origin": "current_center_source_20261118"
+    },
+    "center/common.py": {
+      "sha256": "26d3ae7bfa1d39206b479f5954b5c68fd792fe6164192967227d3fcf7f04de7a",
+      "origin": "current_center_source_20261118"
+    },
+    "center/decision.py": {
+      "sha256": "55fc13a5f12e659412e767f2984bceaf7d9c2ba1c7152e0585227e7e54d56c2c",
+      "origin": "current_center_source_20261118"
+    },
+    "center/web_auth.py": {
+      "sha256": "088a56a842a1dd77d389fda90df1aadced59d2b128b14711339017e41745b05b",
+      "origin": "current_center_source_20261118"
+    },
+    "center/dashboard.html": {
+      "sha256": "a6d060b1318233a9dc3e911e925c66c26aaf8e34d15de0e05920a8af3787c16c",
+      "origin": "current_center_source_20261118"
+    },
+    "center/set_web_password.py": {
+      "sha256": "53686398081d5865a1579749fa91602b86bf08724899b7098f73bf31b9fe1b9e",
+      "origin": "current_center_source_20261118"
+    }
+  },
+  "qwen_sha256": "415e7a97c4b68ab42e6494d4c17bef887217632e644a206ee61408f2e0bcca98",
+  "qwen_bytes": 2012012128,
+  "policy": "rbt3_fusion0715_then_qwen35_2b_clean_v2_q8",
+  "threshold": 0.715
+}

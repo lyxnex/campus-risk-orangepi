@@ -1,0 +1,32 @@
+{
+  "device_id": "opi5pro-02",
+  "scene_id": "scene-02",
+  "scene_name": "采集点2",
+  "center_url": "http://CENTER_HOST:8765",
+  "token": "REPLACE_WITH_PRIVATE_SITE_TOKEN",
+  "base_dir": "/home/orangepi/campus-risk",
+  "state_dir": "/home/orangepi/campus-risk/deployment_data_SITE_ID_opi5pro-02",
+  "port": "/dev/serial/by-id/REPLACE_WITH_THIS_MICROPHONE_ESP_USB",
+  "decision_policy": "rbt3_fusion0715_then_qwen35_2b_clean_v2_q8",
+  "rbt3_fusion_threshold": 0.715,
+  "with_macbert": false,
+  "with_ced": false,
+  "upload_enabled": true,
+  "capture_cpu_affinity": "0,1",
+  "qwen": {
+    "server_path": "qwen35_cpu_test/runtime/llama.cpp-aa75ff323/build-arm64/bin/llama-server",
+    "model_path": "qwen35_cpu_test/clean_v2_20261117_102215/qwen35_2b_finetuned-Q8_0.gguf",
+    "threads": 2,
+    "context": 2048,
+    "port": 18772,
+    "timeout_seconds": 600,
+    "load_timeout_seconds": 180
+  },
+  "upload_timeout_seconds": 20,
+  "retry_max_seconds": 60,
+  "min_free_gib": 1,
+  "resume_free_gib": 2,
+  "ordinary_retention_hours": 24,
+  "acknowledged_retention_days": 7,
+  "housekeeping_seconds": 60
+}

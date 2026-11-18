@@ -1,0 +1,26 @@
+[Unit]
+Description=Campus risk SenseVoice RBT3 Qwen Q8
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=orangepi
+WorkingDirectory=/home/orangepi/campus-risk
+ExecStart=/home/orangepi/campus-risk/.venv/bin/python -u /home/orangepi/campus-risk/qwen35_clean_v2_deploy_20261117/campus_risk_deploy/edge_service.py --config /home/orangepi/campus-risk/qwen35_clean_v2_deploy_20261117/deployment_config.json
+Restart=on-failure
+RestartSec=15
+KillSignal=SIGTERM
+KillMode=control-group
+TimeoutStopSec=150
+UMask=0077
+CPUAffinity=4 5
+Environment=PYTHONUNBUFFERED=1
+Environment=HF_HUB_OFFLINE=1
+Environment=TRANSFORMERS_OFFLINE=1
+Environment=TOKENIZERS_PARALLELISM=false
+Environment=OMP_NUM_THREADS=2
+Environment=OPENBLAS_NUM_THREADS=2
+
+[Install]
+WantedBy=multi-user.target

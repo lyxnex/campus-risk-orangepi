@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>校园风险语言 · 中心复核</title>
+<style>
+body{font:15px system-ui,sans-serif;background:#f4f6f8;color:#172333;margin:0}header{background:#172e44;color:white;padding:22px 4vw}h1{font-size:24px;margin:0 0 8px}main{max-width:1250px;margin:24px auto;padding:0 20px}section{background:white;border:1px solid #dce2e8;border-radius:12px;padding:18px;margin-bottom:16px}input,textarea,select,button{font:inherit;padding:9px;border:1px solid #b8c5d1;border-radius:6px}button{background:#175e83;color:white;cursor:pointer;margin:4px}input{max-width:65vw;width:410px}textarea{width:95%;height:65px}small,.muted{color:#647384}table{width:100%;border-collapse:collapse}td,th{padding:12px 8px;text-align:left;border-bottom:1px solid #e3e9ee;vertical-align:top}td:nth-child(3){min-width:220px;max-width:450px}a{color:#175e83}.review-button{display:inline-block;padding:9px 16px;border:1px solid #175e83;border-radius:7px;background:#175e83;color:white;text-decoration:none;white-space:nowrap;font-weight:600}.review-button:hover{background:#104967}.review-button:focus-visible{outline:3px solid #81bddc;outline-offset:3px}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#eef3f6;padding:12px}.model-scores{white-space:pre-line;min-width:190px;font-variant-numeric:tabular-nums}.model-help{font-size:12px;color:#647384}dt{font-weight:600;margin-top:12px}dd{margin:4px 0;white-space:pre-wrap;overflow-wrap:anywhere}.badge{color:#aa4d10;font-weight:600}.detail{border-left:4px solid #175e83}.error{color:#b52b20}#empty{padding:25px;color:#647384}audio{display:block;max-width:100%;margin:12px 0}@media(max-width:700px){table{font-size:13px}th,td{padding:8px 3px}}
+</style>
+<header><h1 id="pageTitle">校园风险语言 · 中心复核</h1><div>接收边缘候选，结合原始音频与模型信息人工判断。</div></header>
+<main>
+<p id="back" hidden><a href="/">← 返回事件列表</a></p>
+<section id="auth"><h2>登录中心</h2><form id="loginForm"><label>登录密码 <input type="password" id="password" autocomplete="current-password" maxlength="128" required placeholder="请输入登录密码"></label><button id="connect" type="submit">登录</button></form><p id="status">请输入密码登录中心。</p></section>
+<p id="account" hidden>已登录中心 <button id="logout">退出登录</button></p><p id="notice" role="status"></p>
+<section id="list" hidden><strong>待复核事件</strong> <span id="count" class="muted"></span><button id="refresh">刷新</button><label>筛选 <select id="filter"><option value="all">全部</option><option value="pending">待复核</option><option value="confirmed">人工确认有风险</option><option value="dismissed">人工排除</option><option value="uncertain">无法判断</option></select></label><div style="overflow:auto"><table><thead><tr><th>音频起止时间</th><th>设备 / 场景</th><th>转写</th><th>各模型结果</th><th>人工复核</th><th></th></tr></thead><tbody id="rows"></tbody></table></div><div id="empty"></div></section>
+<section id="detail" class="detail" hidden><h2 id="title"></h2><div id="time"></div><audio id="audio" controls></audio><p id="text"></p><p class="muted">时间来自香橙派时钟与采样计数估算，含触发前缓存；不是逐字定位时间。模型候选分数不能替代人工判断。</p><div id="downloads"></div><details><summary>事件处理信息</summary><dl id="eventInfo"></dl></details><p><label>人工结果 <select id="review"><option value="pending">待复核</option><option value="confirmed">人工确认有风险</option><option value="dismissed">人工排除</option><option value="uncertain">无法判断</option></select></label></p><textarea id="note" placeholder="复核说明（例如：视频背景声、ASR听错、缺少上下文）"></textarea><br><button id="save">保存人工结果</button><span id="saved"></span></section>
+</main>
+<script>
+
+const $=id=>document.getElementById(id);
+const params=new URLSearchParams(location.search);
+const isReview=params.get('view')==='review';
+const target={device_id:params.get('device'),event_id:params.get('event')};
+let events=[],selected=null,blobUrl=null,authenticated=false,csrfToken="";
+const labels={pending:'待复核',confirmed:'人工确认有风险',dismissed:'人工排除',uncertain:'无法判断'};
+const time=s=>s?new Date(s).toLocaleString('zh-CN',{hour12:false}):'未知';
+sessionStorage.removeItem('center_token');
+$('filter').value=sessionStorage.getItem('center_filter')||'all';
+$('list').hidden=true;
+$('back').hidden=!isReview;
+if(isReview){$('pageTitle').textContent='事件试听与复核';document.title='事件试听与复核 · 校园风险语言';}
+async function api(path,options={}){
+  const headers=new Headers(options.headers||{});
+  if(options.method==='POST'&&csrfToken)headers.set('X-CSRF-Token',csrfToken);
+  const r=await fetch(path,{...options,headers,credentials:'same-origin'});
+  if(!r.ok){let msg;try{msg=(await r.json()).error}catch{msg=r.statusText}if(r.status===401)resetAuth();throw Error(msg||r.statusText)}
+  return r;
+}
+function fileUrl(e,name){return '/api/file?'+new URLSearchParams({device:e.device_id,event:e.event_id,name});}
+function fail(e){$('notice').textContent=e.message;$('notice').className='error';}
+function resetAuth(){authenticated=false;csrfToken='';selected=null;events=[];$('auth').hidden=false;$('account').hidden=true;$('list').hidden=true;$('detail').hidden=true;$('rows').replaceChildren();$('audio').pause();$('audio').removeAttribute('src');$('audio').load();if(blobUrl){URL.revokeObjectURL(blobUrl);blobUrl=null;}}
+async function refresh(){
+  try{
+    const [r,s]=await Promise.all([api('/api/events'),api('/api/status')]);
+    const d=await r.json(),status=await s.json();events=d.events;
+    $('count').textContent=`共 ${d.total} 条，显示最近 ${events.length} 条`;
+    $('notice').textContent=`已连接 · 中心时间 ${time(status.server_time)} · 磁盘剩余 ${status.disk_free_gib} GiB · 页面时间按浏览器当地时区显示`;
+    $('notice').className='';render();
+  }catch(e){fail(e)}
+}
+function cell(tr,value){const td=document.createElement('td');td.textContent=value;tr.append(td);return td;}
+
+const soundLabels={Speech:'语音',Singing:'歌声',Music:'音乐',Shout:'喊叫',Yell:'大喊',Screaming:'尖叫',Slap:'拍击声',Thump:'撞击声'};
+function formatScore(value){return typeof value==='number'&&Number.isFinite(value)?value.toFixed(4):null;}
+function cedText(row){
+  if(!row||row.status==='not_run'||row.status==='skipped')return '未运行';
+  if(row.status==='error')return '处理失败';
+  const top=row.top5?.[0];const label=row.top_label||top?.label||row.label;
+  const score=formatScore(row.top_score??top?.score??row.score);
+  if(label)return (soundLabels[label]||label)+(score?' '+score:'');
+  return score||'未运行';
+}
+function isQwenEvent(e){return ['rbt3_fusion_then_qwen35_2b_q8_v1','rbt3_fusion_then_qwen35_2b_clean_v2_q8','rbt3_fusion0715_then_qwen35_2b_clean_v2_q8'].includes(e.decision_policy)||Boolean(e.scores?.qwen35_2b);}
+function qwenName(e){return 'Qwen-2B';}
+function scoreLines(e){
+  const m=e.scores||{},r=m.rbt3||{},b=m.macbert||{},q=m.qwen35_2b;
+  const isQwen=isQwenEvent(e);
+  const first=formatScore(r.fusion_score),semantic=formatScore(r.semantic_score);
+  const rbt=first?first+'（融合）':semantic?semantic+'（语义）':r.status==='skipped'?'未运行':'无结果';
+  const mac=formatScore(b.semantic_score)||(b.status==='skipped'?'未运行':'无结果');
+  const qwen=q?.status==='complete'&&typeof q.risk==='boolean'?(q.risk?'风险线索':'非风险'):q?.status==='skipped'?'未运行':q?.status==='error'?'处理失败':'无结果';
+  return ['RBT3：'+rbt,isQwen?qwenName(e)+'：'+qwen:'MacBERT：'+mac,'CED-mini：'+cedText(m.ced_mini||m.ced)];
+}
+function renderEventInfo(e){
+  const items=[['事件编号',e.event_id],['场景',e.scene_name],['设备',e.device_id],
+    ['录音时间',time(e.capture_start_utc)+' 至 '+time(e.capture_end_utc)],
+    ['转写内容',e.text],['情绪标签',e.emotion||'无结果'],['各模型结果',scoreLines(e).join('\n')],
+    ['判决方式',isQwenEvent(e)?'RBT3情绪融合初筛通过后，由Qwen-2B复核；两级都通过才上报。':'RBT3情绪融合初筛通过后，再由MacBERT复核；两级都通过才上报。'],
+    ['声音事件说明','CED-mini输出声音事件类别与分数，不参与当前风险判决，也不是打人等动作的事实认定。'],
+    ['推理完成时间',time(e.inference_completed_at)],['处理版本',e.pipeline_version||'未记录']];
+  $('eventInfo').replaceChildren();
+  for(const [name,value] of items){const dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=name;dd.textContent=value??'未记录';$('eventInfo').append(dt);$('eventInfo').append(dd);}
+}
+
+function render(){
+  $('rows').replaceChildren();
+  const list=events.filter(e=>$('filter').value==='all'||e.review.status===$('filter').value);
+  for(const e of list){
+    const tr=document.createElement('tr');
+    cell(tr,time(e.capture_start_utc)+' — '+time(e.capture_end_utc));
+    cell(tr,e.scene_name+' / '+e.device_id);cell(tr,e.text);
+    const scores=cell(tr,scoreLines(e).join('\n'));scores.className='model-scores';scores.title='RBT3显示情绪融合分数；第二级显示MacBERT语义分数或Qwen布尔判断；CED-mini仅作声音事件观察。';
+    cell(tr,labels[e.review.status]||e.review.status);
+    const a=document.createElement('a');a.textContent='试听复核';a.className='review-button';
+    a.href='/?'+new URLSearchParams({view:'review',device:e.device_id,event:e.event_id});
+    cell(tr,'').append(a);$('rows').append(tr);
+  }
+  $('empty').textContent=list.length?'':'暂无对应事件；普通片段不会上传到这里。';
+}
+async function download(e,name){
+  const r=await api(fileUrl(e,name)),url=URL.createObjectURL(await r.blob());
+  const a=document.createElement('a');a.href=url;a.download=e.event_id+'_'+name;a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),30000);
+}
+async function loadReview(){
+  if(!target.device_id||!target.event_id)throw Error('缺少事件标识，请返回列表重新选择。');
+  $('notice').textContent='正在加载事件…';
+  const [info,receipt,review,audio]=await Promise.all([
+    api(fileUrl(target,'event.json')),api(fileUrl(target,'receipt.json')),
+    api(fileUrl(target,'review.json')),api(fileUrl(target,'audio.wav'))]);
+  const e=await info.json(),received=await receipt.json(),state=await review.json();
+  try{const response=await api(fileUrl(target,'ced_mini.json'));const ced=await response.json();if(ced.status==='complete')e.scores={...e.scores,ced_mini:ced};}catch(error){/* Old events may have no CED observation. */}
+  selected={...e,review:state};
+  $('title').textContent=e.scene_name+' · '+e.event_id;
+  $('time').textContent='录音 '+time(e.capture_start_utc)+' 至 '+time(e.capture_end_utc)+'；中心收到 '+time(received.received_at);
+  $('text').textContent=e.text;$('review').value=state.status;$('note').value=state.note||'';$('saved').textContent='';
+  if(blobUrl)URL.revokeObjectURL(blobUrl);
+  blobUrl=URL.createObjectURL(await audio.blob());$('audio').src=blobUrl;
+  renderEventInfo(e);$('downloads').replaceChildren();
+  for(const name of ['audio.wav','event.json','capture.json','inference.json','transcript.txt','bundle.zip']){
+    const b=document.createElement('button');b.textContent='下载 '+name;b.onclick=()=>download(e,name).catch(fail);$('downloads').append(b);
+  }
+  if(e.scores?.ced_mini?.status==='complete'){const b=document.createElement('button');b.textContent='下载 CED-mini结果';b.onclick=()=>download(e,'ced_mini.json').catch(fail);if(e.scores.ced_mini.computed_on)$('downloads').append(b);}
+  $('detail').hidden=false;$('notice').textContent='';
+}
+$('save').onclick=async()=>{
+  if(!selected)return;$('save').disabled=true;$('saved').textContent='正在保存…';
+  try{
+    const r=await api('/api/review',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({device_id:selected.device_id,event_id:selected.event_id,status:$('review').value,note:$('note').value})});
+    selected.review=(await r.json()).review;$('saved').textContent='已保存 · '+time(selected.review.updated_at);
+  }catch(e){$('saved').textContent='保存失败，请重试';fail(e)}finally{$('save').disabled=false}
+};
+function enter(){
+  $('auth').hidden=true;$('account').hidden=false;$('list').hidden=isReview;$('notice').textContent='';
+  if(isReview)return loadReview().catch(fail);return refresh();
+}
+$('loginForm').onsubmit=async event=>{
+  event.preventDefault();$('connect').disabled=true;$('notice').textContent='正在登录…';
+  try{
+    const r=await api('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:$('password').value})});
+    const data=await r.json();csrfToken=data.csrf;authenticated=true;$('password').value='';await enter();
+  }catch(e){fail(e)}finally{$('connect').disabled=false}
+};
+$('logout').onclick=async()=>{
+  try{await api('/api/logout',{method:'POST'});resetAuth();$('password').value='';$('notice').textContent='已退出登录';}catch(e){fail(e)}
+};
+async function restoreSession(){
+  try{
+    const r=await fetch('/api/session',{credentials:'same-origin'});
+    if(r.status===401){resetAuth();return;}
+    if(!r.ok)throw Error('无法检查登录状态，请重试');
+    const data=await r.json();csrfToken=data.csrf;authenticated=true;await enter();
+  }catch(e){fail(e)}
+}
+$('refresh').onclick=refresh;
+$('filter').onchange=()=>{sessionStorage.setItem('center_filter',$('filter').value);render()};
+setInterval(()=>{if(!isReview&&authenticated)refresh()},10000);
+window.addEventListener('pagehide',()=>{$('audio').pause();if(blobUrl){URL.revokeObjectURL(blobUrl);blobUrl=null;}});
+window.addEventListener('pageshow',event=>{if(event.persisted)restoreSession();});
+restoreSession();
+
+</script></html>

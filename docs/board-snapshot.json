@@ -1,0 +1,72 @@
+{
+  "status": "read_only_snapshot",
+  "source_files": {
+    "edge/campus_risk_deploy/common.py": {
+      "sha256": "26d3ae7bfa1d39206b479f5954b5c68fd792fe6164192967227d3fcf7f04de7a",
+      "bytes": 5230
+    },
+    "edge/campus_risk_deploy/decision.py": {
+      "sha256": "55fc13a5f12e659412e767f2984bceaf7d9c2ba1c7152e0585227e7e54d56c2c",
+      "bytes": 2191
+    },
+    "edge/campus_risk_deploy/edge_service.py": {
+      "sha256": "ad045772b093ee124bab9f8b6a7cf6c3033681ae68c1ac20468c62a2198f49c5",
+      "bytes": 18665
+    },
+    "edge/campus_risk_deploy/qwen_runtime.py": {
+      "sha256": "8ca4c30e516bc472435c777f9c467c1bf1fb18fcd60add046d2c31074d474c0a",
+      "bytes": 8832
+    },
+    "edge/campus_risk_deploy/qwen_system_prompt.txt": {
+      "sha256": "8a942264ffd2a3a1292e0aa1d7bfd5f44927f61702f7f898e7e5d7b572ed3774",
+      "bytes": 645
+    },
+    "edge/campus_risk_deploy/check_edge.py": {
+      "sha256": "77b7de92e45ff2adc7805c1490a203b69aa3e2805af17c4cfca95f76d3af9c4a",
+      "bytes": 1296
+    },
+    "edge/campus_risk_deploy/capture/capture.py": {
+      "sha256": "848c1fa328f91457edf47ede4b46f723c92337090a6b1d3d24d6ae2d0e4a27e8",
+      "bytes": 10228
+    },
+    "edge/campus_risk_deploy/capture/auto_protocol.py": {
+      "sha256": "26b452d618be66327fc874e5e802299c0fc5b61bcd81c88efbe13b26bc3f073c",
+      "bytes": 3082
+    },
+    "edge/campus_risk_deploy/capture/reliable_usb.py": {
+      "sha256": "f879f72c1014933047c55e44857714db7e15f98a054763eb17438ca1a57bb492",
+      "bytes": 1290
+    },
+    "edge/campus_risk_deploy/capture/host_health.py": {
+      "sha256": "2ebc1d6aae11b9c32d7bfbec5d1c5157c6484d6407456f0f037321e2d677f407",
+      "bytes": 1348
+    },
+    "edge/campus_risk_deploy/capture/auto_inference.py": {
+      "sha256": "331123ca810d9961aee5546b6fc631a2c268edb4c234b988fa0fd1cafd0a6281",
+      "bytes": 10039
+    },
+    "edge/campus_risk_deploy/capture/qwen_inference.py": {
+      "sha256": "74bb9af678a9c5aa1a1713832caaaf1cbac35aca88d1a92c8bbec49193b3b372",
+      "bytes": 4422
+    }
+  },
+  "platform": {
+    "python": "3.10.12 (main, Aug 31 2026, 10:18:17) [GCC 11.4.0]",
+    "machine": "aarch64",
+    "release": "5.10.160-rockchip-rk3588",
+    "system": "Linux"
+  },
+  "recordings_included": false,
+  "private_pairing_included": false,
+  "runtime_system_dependencies": [
+    "\tlinux-vdso.so.1 (0x0000007fa231c000)",
+    "\tlibgomp.so.1 => /lib/aarch64-linux-gnu/libgomp.so.1 (0x0000007fa1580000)",
+    "\tlibssl.so.3 => /lib/aarch64-linux-gnu/libssl.so.3 (0x0000007fa14d0000)",
+    "\tlibcrypto.so.3 => /lib/aarch64-linux-gnu/libcrypto.so.3 (0x0000007fa10e0000)",
+    "\tlibstdc++.so.6 => /lib/aarch64-linux-gnu/libstdc++.so.6 (0x0000007fa0eb0000)",
+    "\tlibm.so.6 => /lib/aarch64-linux-gnu/libm.so.6 (0x0000007fa0e10000)",
+    "\tlibgcc_s.so.1 => /lib/aarch64-linux-gnu/libgcc_s.so.1 (0x0000007fa0de0000)",
+    "\tlibc.so.6 => /lib/aarch64-linux-gnu/libc.so.6 (0x0000007fa0c30000)",
+    "\t/lib/ld-linux-aarch64.so.1 (0x0000007fa22e3000)"
+  ]
+}
