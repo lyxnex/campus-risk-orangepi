@@ -16,6 +16,7 @@ center/                  当前网页、接收端与本地密码设置工具
 config/                  无实际令牌、地址和麦克风身份的配置示例
 deploy/                  systemd 服务模板
 tools/export_running_board.py  在旧板只读导出当前源码、依赖清单、模型校验信息
+tools/package_board_assets.py  按已导出清单打包非 Qwen 模型与 ARM runtime，不复制录音或 Q8
 docs/MIGRATION.md        新板迁移的完整步骤和验收边界
 docs/GITHUB_UPLOAD.md    GitHub 提交范围和大文件方案
 requirements/README.md   旧板实际依赖导出位置及安装限制

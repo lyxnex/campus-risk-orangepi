@@ -20,6 +20,8 @@
 4. 已验证的 Linux ARM64 llama-server 与依赖说明。
 5. 从旧板导出的依赖锁定清单；后续若制作离线 ARM64 wheels，也单独作为附件。
 
+当前已核验的本地 Q8 可单独上传；旧板可用 `tools/package_board_assets.py` 按 `assets.lock.json` 生成一个只含 SenseVoice、RBT3 和 ARM runtime 的 `nonqwen-assets.tar`。新板解包时恢复归档内的项目相对路径，逐文件对照 `assets.lock.json`。该工具不读取或打包录音、待传包及正式配置。
+
 每个附件记录 SHA256、大小、目标路径、版本、来源及必要许可。不要把旧 `.venv` 当作可跨系统迁移的安装包。Release 下载成功后仍需校验，不应把 Token 放入 URL、README 或提交历史。
 
 官方大文件规则：https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github
