@@ -6,7 +6,7 @@
 
 仓库 `lyxnex/campus-risk-orangepi` 为私人仓库。每位安装人员需获得仓库读取权限，并在新板配置自己的只读 SSH 凭据；不要复制旧板 SSH 私钥、Tailscale 状态或设备身份。克隆后应核对仓库的 `assets.lock.json`。
 
-从私人 Release `v0.1.0-migration` 取得两个附件：`nonqwen-assets.tar` 和 `qwen35_2b_finetuned-Q8_0.gguf`。可在已登录 GitHub 的电脑下载，再通过 `scp` 传入新板 `/home/orangepi/campus-risk/downloads/`。传输时不要把 GitHub token 放在 URL、命令历史或仓库里。
+从[私人预发行版 `v0.1.0-migration`](https://github.com/lyxnex/campus-risk-orangepi/releases/tag/v0.1.0-migration)取得两个附件：`nonqwen-assets.tar` 和 `qwen35_2b_finetuned-Q8_0.gguf`。可在已登录 GitHub 的电脑下载，再通过 `scp` 传入新板 `/home/orangepi/campus-risk/downloads/`。传输时不要把 GitHub token 放在 URL、命令历史或仓库里。
 
 在**新板**执行（完成 GitHub SSH 读取授权后）：
 

@@ -1,6 +1,6 @@
 # 香橙派校园风险语言检测
 
-这是从已运行版本整理的 GitHub 待提交源码目录。2026-11-18 已对旧板做只读导出，12 份板端源码与本目录逐文件 SHA256 一致；尚未在全新香橙派上完成安装验收。代码和模型不再训练、合并或转换。
+这是从已运行版本整理并上传到私人 GitHub 仓库的源码。2026-11-18 已对旧板做只读导出，12 份板端源码与本目录逐文件 SHA256 一致；尚未在全新香橙派上完成安装验收。代码和模型不再训练、合并或转换。
 
 ## 当前流程
 
@@ -33,9 +33,9 @@ source_manifest.json     当前整理源码的 SHA256 和已核验版本
 
 ## 新板还需要哪些内容
 
-`git clone` 只能得到程序。还需要下载模型及 ARM runtime、重建匹配的 Python 环境、导入本现场的私密配对配置、绑定实际 ESP USB 串口并安装 systemd 服务。详见 [迁移步骤](docs/MIGRATION.md)。
+`git clone` 只能得到程序。还需要下载模型及 ARM runtime、重建匹配的 Python 环境、导入本现场的私密配对配置、绑定实际 ESP USB 串口并安装 systemd 服务。详见 [新板导入命令](docs/NEW_BOARD_IMPORT.md)和[迁移验收步骤](docs/MIGRATION.md)。
 
-模型与 runtime 应按校验清单单独发布为私有 GitHub Release 附件或通过 Git LFS 管理，不能把 1.9 GB GGUF 直接普通 Git 提交。当前 Q8：
+模型与 runtime 已放入[私人预发行版 v0.1.0-migration](https://github.com/lyxnex/campus-risk-orangepi/releases/tag/v0.1.0-migration)的两个附件，大小和 SHA256 见 `release_assets.json`；不能把 1.9 GB GGUF 直接普通 Git 提交。当前 Q8：
 
 - 文件：`qwen35_2b_finetuned-Q8_0.gguf`
 - 字节数：`2012012128`

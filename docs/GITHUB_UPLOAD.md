@@ -2,7 +2,7 @@
 
 只把本目录作为仓库根。不要在整个历史 Codex 工作目录执行 `git add .`。
 
-目标已确认为用户个人私人仓库 `lyxnex/campus-risk-orangepi`。旧板只读导出确认源码、Python 依赖和资产清单；推送前仍须检查暂存文件和远端状态。
+源码和资产清单已推送到用户个人私人仓库 `lyxnex/campus-risk-orangepi`。旧板只读导出确认源码、Python 依赖和资产清单；预发行版标签 `v0.1.0-migration` 指向已核验的仓库提交。
 
 ## 普通代码提交
 
@@ -12,15 +12,12 @@
 
 ## Release 附件或 LFS
 
-当前 Q8 约 1.9 GB，普通 GitHub Git 提交会超过 100 MiB 文件限制。建议发布独立私有 Release 附件：
+当前 Q8 约 1.9 GB，普通 GitHub Git 提交会超过 100 MiB 文件限制。已发布[私人预发行版 `v0.1.0-migration`](https://github.com/lyxnex/campus-risk-orangepi/releases/tag/v0.1.0-migration)，含两个独立附件：
 
-1. 当前 Q8 GGUF（已有固定 SHA256）。
-2. SenseVoice 模型、tokens 与 manifest。
-3. RBT3 模型、tokenizer 与融合 manifest。
-4. 已验证的 Linux ARM64 llama-server 与依赖说明。
-5. 从旧板导出的依赖锁定清单；后续若制作离线 ARM64 wheels，也单独作为附件。
+1. 当前 Q8 GGUF，2,012,012,128 字节。
+2. `nonqwen-assets.tar`，409,456,640 字节，含 SenseVoice、RBT3 和 Linux ARM64 llama-server 共 12 项。
 
-当前已核验的本地 Q8 可单独上传；旧板可用 `tools/package_board_assets.py` 按 `assets.lock.json` 生成一个只含 SenseVoice、RBT3 和 ARM runtime 的 `nonqwen-assets.tar`。新板解包时恢复归档内的项目相对路径，逐文件对照 `assets.lock.json`。该工具不读取或打包录音、待传包及正式配置。
+GitHub 返回的两个附件 SHA256 均与 `release_assets.json` 一致；归档内部每个文件也与 `assets.lock.json` 一致。依赖锁定清单在 `requirements/edge.lock.txt`，不作为附件。后续若制作离线 ARM64 wheels，应单独发布和校验。
 
 每个附件记录 SHA256、大小、目标路径、版本、来源及必要许可。不要把旧 `.venv` 当作可跨系统迁移的安装包。Release 下载成功后仍需校验，不应把 Token 放入 URL、README 或提交历史。
 
@@ -28,4 +25,4 @@
 
 ## 发布前缺口
 
-仍需准备附件及可重建环境，完成新板安装和端到端验收。尚未完成这些步骤前，不能称 `git clone` 已经实现一键部署。
+仍需在新板重建匹配的 Python 环境、导入本板私密配置，并完成实机安装和端到端验收。尚未完成这些步骤前，不能称 `git clone` 已经实现一键部署。
