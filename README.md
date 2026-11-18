@@ -17,7 +17,9 @@ config/                  无实际令牌、地址和麦克风身份的配置示�
 deploy/                  systemd 服务模板
 tools/export_running_board.py  在旧板只读导出当前源码、依赖清单、模型校验信息
 tools/package_board_assets.py  按已导出清单打包非 Qwen 模型与 ARM runtime，不复制录音或 Q8
+tools/verify_assets.py   新板导入后逐文件核对 13 项模型与 runtime
 docs/MIGRATION.md        新板迁移的完整步骤和验收边界
+docs/NEW_BOARD_IMPORT.md 同镜像新板的具体导入命令与独立配置步骤
 docs/GITHUB_UPLOAD.md    GitHub 提交范围和大文件方案
 requirements/README.md   旧板实际依赖导出位置及安装限制
 requirements/edge.lock.txt 旧板 Python 3.10.12 环境的包版本快照

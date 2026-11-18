@@ -2,6 +2,8 @@
 
 本目录是整理后的源码，不是已经在新板验收的一键安装器。旧板继续运行，不移动或删除其模型、历史录音、待传队列及私密配置。
 
+同镜像新板的可执行命令见 [NEW_BOARD_IMPORT.md](NEW_BOARD_IMPORT.md)。
+
 1. 旧板已运行 `tools/export_running_board.py`：只读导出未停止服务，12 份实际代码与 `source_manifest.json` 一致；Python 版本、依赖和 13 项资产校验信息已纳入仓库。
 2. 从确认的 GitHub 目标获取代码；模型附件单独发布，并逐文件对照 `assets.lock.json` 校验。
 3. 新板准备匹配的 ARM64 Ubuntu/Python 和系统库，启用串口权限、时间同步、散热。已有系统可继续使用，不要求重新烧录系统；若与旧板系统不同，先做兼容性验证。
