@@ -24,6 +24,7 @@ docs/GITHUB_UPLOAD.md    GitHub 提交范围和大文件方案
 requirements/README.md   旧板实际依赖导出位置及安装限制
 requirements/edge.lock.txt 旧板 Python 3.10.12 环境的包版本快照
 assets.lock.json          旧板 13 项模型、tokenizer、ARM runtime 资产的大小和 SHA256
+release_assets.json       私人 Release 两个附件的大小和 SHA256
 docs/board-snapshot.json  旧板只读导出的源码哈希、平台和 runtime 动态库信息
 source_manifest.json     当前整理源码的 SHA256 和已核验版本
 ```
