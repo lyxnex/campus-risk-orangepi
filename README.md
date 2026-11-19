@@ -16,6 +16,7 @@ ESP32S3 USB 有线采音 → SenseVoice 转写/情绪 → RBT3 情绪融合分�
 4. 如需新增同型号麦克风，按 [固件与连接](docs/MIC_FIRMWARE.md)验证设备身份并配置 RUSBAUT2；已配置好的麦克风无需重刷。
 5. 每块香橙派按 [新板导入步骤](docs/NEW_BOARD_IMPORT.md)下载两份板端附件、核对哈希、绑定自己的麦克风和配对文件、安装 systemd 服务。
 6. 按 [开发说明](docs/DEVELOPMENT.md)继续添加功能；[逐文件说明](docs/FILE_MAP.md)可定位入口和依赖。
+7. 安装完成后按 [日常开机与故障恢复](docs/DAILY_STARTUP.md)检查中心、Tailscale、麦克风和板端服务。
 
 这套流程需要相同系统镜像、可用的 Python/Ubuntu 软件源、设备网络地址与现场独立凭据。仓库不会携带他人的 token、密码、Tailscale 身份或历史录音。当前发布不是无需现场输入的一键离线安装包。
 **代码请取 `main` 分支；`v0.1.0-migration` 页面用于取得模型附件。**该预发行版的自动源码 ZIP 对应较早的标签，不含后来补齐的中心/固件文档。
@@ -35,6 +36,7 @@ tools/verify_assets.py   新板导入后逐文件核对 13 项模型与 runtime
 tools/verify_repository.py 克隆后核对源码镜像与 ESP 固件
 docs/MIGRATION.md        新板迁移的完整步骤和验收边界
 docs/NEW_BOARD_IMPORT.md 同镜像新板的具体导入命令与独立配置步骤
+docs/DAILY_STARTUP.md    已部署设备每次开机的检查与故障恢复
 docs/GITHUB_UPLOAD.md    GitHub 提交范围和大文件方案
 docs/CENTER_WINDOWS.md   新 Windows 电脑上的中心与网页配置
 docs/TAILSCALE_CROSS_NETWORK.md 跨局域网 Tailscale 注册、换账号与配对

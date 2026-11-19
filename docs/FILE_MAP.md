@@ -11,6 +11,7 @@
 | `source_manifest.json` | 从旧板和当前中心核对的源码哈希；新增工具/固件另有说明。 |
 | `docs/board-snapshot.json` | 旧板平台、Python、动态库与现场导出摘要。 |
 | `docs/NEW_BOARD_IMPORT.md` | 新香橙派从空白系统导入代码、资产和服务。 |
+| `docs/DAILY_STARTUP.md` | 已部署中心和板端每次开机的检查、运行状态与故障恢复。 |
 | `docs/CENTER_WINDOWS.md` | 新 Windows 中心、网页、CED 模型及设备配对。 |
 | `docs/TAILSCALE_CROSS_NETWORK.md` | 跨局域网 tailnet 注册、登录、账号移交、地址与防火墙。 |
 | `docs/CAMPUS_NETWORK.md` | 北邮 Portal 入网与可选的定时重认证。 |
