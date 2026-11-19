@@ -39,14 +39,14 @@ ldd qwen35_cpu_test/runtime/llama.cpp-aa75ff323/build-arm64/bin/llama-server
 ```bash
 cd /home/orangepi/campus-risk
 python3 -m venv .venv
-.venv/bin/python -m pip install -r source/requirements/edge.lock.txt
+.venv/bin/python -m pip install -r source/requirements/edge.lock.txt --extra-index-url https://download.pytorch.org/whl/cpu
 .venv/bin/python -c 'import numpy, sherpa_onnx, torch, transformers, serial; print("PYTHON_IMPORT_OK")'
 mkdir -p qwen35_clean_v2_deploy_20261117
 cp -a source/edge/campus_risk_deploy qwen35_clean_v2_deploy_20261117/
 install -m 600 source/config/edge.example.json qwen35_clean_v2_deploy_20261117/deployment_config.json
 ```
 
-`edge.lock.txt` 是旧板已安装环境的版本快照；若 `torch==2.9.1+cpu` 或其他 ARM64 wheel 无法取得，应先从可信供应源取得匹配 Python 3.10/aarch64 的包，并验证实际导入和推理，不能复制旧板 `.venv` 代替安装。
+`edge.lock.txt` 是旧板已安装环境的版本快照。新板实测普通 PyPI 不提供 `torch==2.9.1+cpu`，因此安装命令加入 PyTorch 官方 CPU 软件源。若其他 ARM64 wheel 无法取得，应先从可信供应源取得匹配 Python 3.10/aarch64 的包，并验证实际导入和推理，不能复制旧板 `.venv` 代替安装。
 
 编辑新板私密 `deployment_config.json`：为每台板指定唯一 `device_id`、`scene_id`、`scene_name`、新 `state_dir` 和本板 `/dev/serial/by-id/` 中的实际 ESP USB 串口；填写本现场的 `center_url` 与共享上传 token。保持策略 `rbt3_fusion0715_then_qwen35_2b_clean_v2_q8`、阈值 `0.715`、Qwen 2 线程、2048 上下文和原有温度/内存保护。不要提交该配置，也不要复制旧板的录音、队列或 ESP 全 flash 身份。
 
