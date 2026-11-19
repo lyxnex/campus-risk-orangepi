@@ -42,6 +42,7 @@
 | --- | --- |
 | `center.py` | HTTP 服务、上传包校验/落盘、网页 API、人工复核与 CED 后台启动。 |
 | `dashboard.html` | 登录、事件列表、试听、下载、筛选与人工复核的完整前端。 |
+| `ui/campus_safety_logo.png` | 校园建筑与守护盾牌标识原图；网页标签图标以 PNG 数据内嵌于 `dashboard.html`。 |
 | `web_auth.py` | 网页密码哈希、登录会话和限速；设备上传使用另一条 bearer token 机制。 |
 | `set_web_password.py` | 已有中心本地交互设置/重置网页密码，不更换设备 token。 |
 | `common.py` | 与板端相同的事件格式和文件操作。 |

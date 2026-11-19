@@ -1,5 +1,5 @@
 {
-  "status": "source_mirrors_verified_against_running_board_export_20261118",
+  "status": "board_source_verified_20261118_center_dashboard_visual_update_20261119",
   "files": {
     "edge/campus_risk_deploy/common.py": {
       "sha256": "26d3ae7bfa1d39206b479f5954b5c68fd792fe6164192967227d3fcf7f04de7a",
@@ -66,8 +66,8 @@
       "origin": "current_center_source_20261118"
     },
     "center/dashboard.html": {
-      "sha256": "a6d060b1318233a9dc3e911e925c66c26aaf8e34d15de0e05920a8af3787c16c",
-      "origin": "current_center_source_20261118"
+      "sha256": "13174b29a6eb4b2f0b21a3cfc754f791958890ca1022998e6f7a62e72513052a",
+      "origin": "running_center_visual_update_20261119"
     },
     "center/set_web_password.py": {
       "sha256": "53686398081d5865a1579749fa91602b86bf08724899b7098f73bf31b9fe1b9e",
