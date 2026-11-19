@@ -72,5 +72,6 @@
 | `verify_assets.py` | 新板核对 13 项模型与 ARM runtime。 |
 | `install_ced_assets.py` | 核对并解压 CED Release 附件。 |
 | `init_site.py` | 交互生成新现场中心配置、随机 token 和各板私密配对文件。 |
+| `verify_repository.py` | 核对旧板/中心源码镜像及随仓库发布的 ESP 固件哈希。 |
 
 `assets/`、`private/`、`.venv/`、录音和队列是运行时内容，**不在 Git 中**。Release 三个附件分别是板端非 Qwen 资产、当前 Q8 GGUF、中心 CED-mini；目录位置与 SHA256 见清单。

@@ -18,6 +18,7 @@ ESP32S3 USB 有线采音 → SenseVoice 转写/情绪 → RBT3 情绪融合分�
 
 这套流程需要相同系统镜像、可用的 Python/Ubuntu 软件源、设备网络地址与现场独立凭据。仓库不会携带他人的 token、密码、Tailscale 身份或历史录音。当前发布不是无需现场输入的一键离线安装包。
 **代码请取 `main` 分支；`v0.1.0-migration` 页面用于取得模型附件。**该预发行版的自动源码 ZIP 对应较早的标签，不含后来补齐的中心/固件文档。
+克隆后可先运行 `py -3.11 .\tools\verify_repository.py`（Windows）或 `python3 tools/verify_repository.py`（Linux），核对运行源码与随仓库发布的固件文件。
 
 ## 目录
 
@@ -30,6 +31,7 @@ deploy/                  systemd、Windows 中心启动/自启和受限防火墙
 tools/export_running_board.py  在旧板只读导出当前源码、依赖清单、模型校验信息
 tools/package_board_assets.py  按已导出清单打包非 Qwen 模型与 ARM runtime，不复制录音或 Q8
 tools/verify_assets.py   新板导入后逐文件核对 13 项模型与 runtime
+tools/verify_repository.py 克隆后核对源码镜像与 ESP 固件
 docs/MIGRATION.md        新板迁移的完整步骤和验收边界
 docs/NEW_BOARD_IMPORT.md 同镜像新板的具体导入命令与独立配置步骤
 docs/GITHUB_UPLOAD.md    GitHub 提交范围和大文件方案
