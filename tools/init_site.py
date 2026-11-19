@@ -25,7 +25,7 @@ def write_private(path, value):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--center-host", required=True, help="Address reachable from Orange Pi boards")
+    parser.add_argument("--center-host", required=True, help="Center Tailscale IPv4 reachable from Orange Pi boards")
     parser.add_argument("--device-id", action="append", required=True, help="Repeat for every board")
     parser.add_argument("--port", type=int, default=8765)
     parser.add_argument("--output-dir", type=Path, default=ROOT / "private")
@@ -33,7 +33,7 @@ def main():
 
     host = args.center_host.strip()
     if not re.fullmatch(r"[A-Za-z0-9.-]+", host) or host in {"localhost", "127.0.0.1", "0.0.0.0"}:
-        parser.error("--center-host must be a LAN or Tailscale address reachable from the boards")
+        parser.error("--center-host must be a network address reachable from the boards")
     if not 1 <= args.port <= 65535:
         parser.error("--port is outside 1..65535")
     devices = args.device_id

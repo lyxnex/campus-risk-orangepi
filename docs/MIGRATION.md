@@ -2,7 +2,7 @@
 
 本目录是整理后的源码与可执行导入流程。第二块同镜像新板已完成采集、推理和中心认证；风险候选上传与网页试听仍待实测。旧板继续运行，不移动或删除其模型、历史录音、待传队列及私密配置。
 
-同镜像新板的可执行命令见 [NEW_BOARD_IMPORT.md](NEW_BOARD_IMPORT.md)。新 Windows 中心和网页见 [CENTER_WINDOWS.md](CENTER_WINDOWS.md)，ESP32S3 固件见 [MIC_FIRMWARE.md](MIC_FIRMWARE.md)。
+先按 [TAILSCALE_CROSS_NETWORK.md](TAILSCALE_CROSS_NETWORK.md)准备跨网连接；北邮校园网步骤见 [CAMPUS_NETWORK.md](CAMPUS_NETWORK.md)。同镜像新板的可执行命令见 [NEW_BOARD_IMPORT.md](NEW_BOARD_IMPORT.md)，新 Windows 中心和网页见 [CENTER_WINDOWS.md](CENTER_WINDOWS.md)，ESP32S3 固件见 [MIC_FIRMWARE.md](MIC_FIRMWARE.md)。
 
 1. 旧板已运行 `tools/export_running_board.py`：只读导出未停止服务，12 份实际代码与 `source_manifest.json` 一致；Python 版本、依赖和 13 项资产校验信息已纳入仓库。
 2. 从确认的 GitHub 目标获取代码；模型附件单独发布，并逐文件对照 `assets.lock.json` 校验。
@@ -28,7 +28,7 @@
 5. 按旧板实际包清单建立 venv，验证 numpy/sherpa_onnx/torch/transformers/serial 导入、ARM runtime `ldd` 和可执行权限。当前 CPU 二进制依赖 Ubuntu 系统动态库，不能假定任意发行版直接通用。
 6. 导入中心生成的该设备私密配对文件，填入模板中的 device_id、scene_id、scene_name、center_url、token、state_dir。不同现场更换凭据；同现场三个设备编号各自独立。保留原来的模型路径、Q8 SHA256 和 0.715 策略。
 7. 用 `ls -l /dev/serial/by-id/` 确认实际 ESP USB，替换 port。新 ESP 麦克风需配置为相同 RUSBAUT2 固件；不复制旧 ESP 全 flash 备份来冒充新设备。
-8. 先验证中心 `/healthz` 和带令牌的 `/api/device-check`，确认设备在中心允许列表。局域网保留中心地址；若使用 Tailscale，每台登录各自项目身份，不复制旧板 tailscaled 状态。
+8. 两端加入同一现场 tailnet，板端使用中心 Tailscale IPv4，先验证中心 `/healthz` 和带令牌的 `/api/device-check`，确认设备在中心允许列表。不复制旧板 tailscaled 状态；更换账号后重新读取地址并更新私密配置和防火墙。
 9. 对照新板用户和路径审查 `deploy/*.service` 后安装 systemd 服务；不能在旧板无条件覆盖已运行的服务。
 10. 验收新板采音 armed、模型 ready、三线程健康、正常聊天本地处理、风险候选中心 ACK、网页音频播放、断网重传和开机恢复。只有通过新板实机验收后才标记可交付。
 

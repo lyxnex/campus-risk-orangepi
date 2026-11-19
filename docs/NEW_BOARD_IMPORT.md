@@ -1,6 +1,6 @@
 # 全新香橙派 5 Pro 导入步骤
 
-适用：同型号 8 GB 香橙派 5 Pro、同一 `Orangepi5pro_1.0.6_ubuntu_jammy_server_linux5.10.160.img` 镜像、独立 ESP32S3 麦克风。旧板无需停止服务或搬走模型、录音、队列。2026-11-19 已在第二块新板实测资产核对、依赖安装、麦克风采集、推理初始化和中心设备认证。
+适用：同型号 8 GB 香橙派 5 Pro、同一 `Orangepi5pro_1.0.6_ubuntu_jammy_server_linux5.10.160.img` 镜像、独立 ESP32S3 麦克风。板端与 Windows 中心可处于不同局域网，须先按 [TAILSCALE_CROSS_NETWORK.md](TAILSCALE_CROSS_NETWORK.md)加入同一现场 tailnet；北邮校园网接入见 [CAMPUS_NETWORK.md](CAMPUS_NETWORK.md)。旧板无需停止服务或搬走模型、录音、队列。2026-11-19 已在第二块新板实测资产核对、依赖安装、麦克风采集、推理初始化和中心设备认证。
 
 ## 取得仓库和附件
 

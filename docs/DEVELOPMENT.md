@@ -19,6 +19,7 @@ ESP32S3 RUSBAUT2 → capture.py 保存 15 秒双声道 WAV
 - Qwen 2 线程、上下文 2048、CPU 亲和 4/5、温度与内存保护来自散热片条件下的现场部署。修改并发与散热策略前先看资源日志。
 - CED-mini 只分析已收到的录音，用于辅助人工复核，不参与两级风险判决。`ced_mini.json` 不存在时，老事件仍应能显示与复核。
 - 每块板使用自己的 `device_id`、`scene_id`、ESP 持久串口和 `state_dir`。同一现场现采用**共享上传 token + 设备允许列表**，不是每板独立 token。增加板时需同时更新中心允许列表及网络规则。
+- 板端与中心可能不在同一局域网，正式链路使用同一现场 tailnet 内的 Tailscale 地址。人员使用各自获授权的账号；账号交接与校园网恢复见 `TAILSCALE_CROSS_NETWORK.md` 和 `CAMPUS_NETWORK.md`。
 
 ## 修改哪里
 

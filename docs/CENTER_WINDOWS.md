@@ -1,6 +1,6 @@
 # 在一台新的 Windows 电脑部署中心与网页
 
-本页针对 Windows x64、Python 3.11、能访问 GitHub 和 Python 包源的新电脑。中心接收香橙派的风险候选，保存录音与元数据，并提供本机网页复核。板端安装见 [NEW_BOARD_IMPORT.md](NEW_BOARD_IMPORT.md)，麦克风固件见 [MIC_FIRMWARE.md](MIC_FIRMWARE.md)。**不要在已有正式中心电脑上运行首次初始化命令**；已有中心的 `center_config.json`、`center_data` 和 `recording_epoch.json` 必须保留。
+本页针对 Windows x64、Python 3.11、能访问 GitHub 和 Python 包源的新电脑。中心接收跨局域网香橙派的风险候选，保存录音与元数据，并提供本机网页复核。先按 [TAILSCALE_CROSS_NETWORK.md](TAILSCALE_CROSS_NETWORK.md)将中心和板端加入同一个现场 tailnet。板端安装见 [NEW_BOARD_IMPORT.md](NEW_BOARD_IMPORT.md)，麦克风固件见 [MIC_FIRMWARE.md](MIC_FIRMWARE.md)。**不要在已有正式中心电脑上运行首次初始化命令**；已有中心的 `center_config.json`、`center_data` 和 `recording_epoch.json` 必须保留。
 
 ## 1. 取得代码和 CED 模型
 
@@ -26,10 +26,12 @@ py -3.11 .\tools\install_ced_assets.py --archive .\downloads\ced-mini-assets.zip
 py -3.11 -m venv .\private\.venv
 & .\private\.venv\Scripts\python.exe -m pip install -r .\requirements\center-ced.txt
 & .\private\.venv\Scripts\python.exe -c "import numpy, onnxruntime; print('CENTER_IMPORT_OK')"
-py -3.11 .\tools\init_site.py --center-host 192.168.1.10 --device-id opi5pro-01 --device-id opi5pro-02
+$Ts = 'C:\Program Files\Tailscale\tailscale.exe'
+$CenterTsIp = (& $Ts ip -4).Trim()
+py -3.11 .\tools\init_site.py --center-host $CenterTsIp --device-id opi5pro-01 --device-id opi5pro-02
 ```
 
-将示例 `192.168.1.10` 换成**这台中心电脑能够被板端访问且会长期保留的实际 LAN 或 Tailscale IPv4**。按现场实际设备数重复 `--device-id`，不同板必须用不同编号。初始化时交互输入网页密码；脚本生成随机上传 token、密码哈希、`private/center_config.json` 和 `private/pairing/<device-id>.json`，不会把密码或 token 打印到终端。私密目录已被 `.gitignore` 排除，仍应只由授权人员保管。
+`$CenterTsIp` 必须是这台中心电脑在**现场 tailnet** 的 IPv4。按现场实际设备数重复 `--device-id`，不同板必须用不同编号。初始化时交互输入网页密码；脚本生成随机上传 token、密码哈希、`private/center_config.json` 和 `private/pairing/<device-id>.json`，不会把密码或 token 打印到终端。私密目录已被 `.gitignore` 排除，仍应只由授权人员保管。更换 Tailscale 账号/tailnet 后中心 IP 可能变化，需更新板端 `center_url` 和中心防火墙规则。
 
 已配置过的现场不要重新初始化来“修复”问题：脚本拒绝覆盖已有配置；如需增加板，需保留现有 token、网页密码、数据目录及接收历史，并在中心 `allowed_devices` 增加独立编号后重启中心。
 
@@ -54,10 +56,11 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\deploy\install_center_
 若板端通过网络访问中心，在**管理员 PowerShell** 中按实际 IPv4 建立限定规则，例如：
 
 ```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\deploy\allow_center_windows.ps1 -CenterAddress 192.168.1.10 -BoardAddress 192.168.1.21,192.168.1.22
+$BoardTsIps = @('100.x.x.x', '100.y.y.y') # 改成两块板的实际 Tailscale IPv4
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\deploy\allow_center_windows.ps1 -CenterAddress $CenterTsIp -BoardAddress $BoardTsIps
 ```
 
-脚本只允许列出的板 IP 到指定中心 IP 的 TCP 8765，不会替换已有同名规则。现场应为中心和板端保留地址，或者分别使用自己的 Tailscale 身份；**不要复制旧设备的 Tailscale 状态或 SSH 私钥**。网页含登录与录音，尽量只在受控 LAN/Tailscale 内使用；跨不可信网络时应配置 TLS 或由可信代理提供 HTTPS。
+两个 `100.x.x.x` 是占位符，必须替换为**各板实际的 Tailscale IPv4**。脚本只允许列出的板 IP 到中心 Tailscale IP 的 TCP 8765，不会替换已有同名规则。所有设备应加入同一现场 tailnet，人员可使用各自获授权的账号；**不要复制旧设备的 Tailscale 状态或 SSH 私钥**。网页含登录与录音，只在受控网络内提供；经非可信网络访问网页时应配置 TLS 或可信 HTTPS 代理。
 
 ## 4. 将每块板与中心配对
 

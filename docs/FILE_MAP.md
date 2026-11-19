@@ -12,6 +12,8 @@
 | `docs/board-snapshot.json` | 旧板平台、Python、动态库与现场导出摘要。 |
 | `docs/NEW_BOARD_IMPORT.md` | 新香橙派从空白系统导入代码、资产和服务。 |
 | `docs/CENTER_WINDOWS.md` | 新 Windows 中心、网页、CED 模型及设备配对。 |
+| `docs/TAILSCALE_CROSS_NETWORK.md` | 跨局域网 tailnet 注册、登录、账号移交、地址与防火墙。 |
+| `docs/CAMPUS_NETWORK.md` | 北邮 Portal 入网与可选的定时重认证。 |
 | `docs/MIC_FIRMWARE.md` | ESP32S3 固件、独立备份、串口绑定。 |
 | `docs/MIGRATION.md` | 总体迁移顺序与验收边界。 |
 | `docs/GITHUB_UPLOAD.md` | 代码、Release 附件和不上传内容的范围。 |
