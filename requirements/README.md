@@ -4,6 +4,6 @@
 
 运行 `tools/export_running_board.py` 会使用旧板 `.venv/bin/python -m pip list --format=json` 生成仅含包名/版本的清单，避免把 pip direct URL 中的凭据带入仓库。本目录 `edge.lock.txt` 是该清单的已核验副本。
 
-该清单是整个已安装环境的快照，不代表最小依赖，也不保证所有版本仍有公开 ARM64 wheel，尤其是 `torch==2.9.1+cpu`。新板应使用同版本操作系统和匹配的 Python minor，重新创建 venv；必要时由旧板/供应源准备匹配 wheels，并做模块导入及实际推理验证。ARM runtime 的系统动态库见 `../docs/board-snapshot.json`。
+该清单是整个已安装环境的快照，不代表最小依赖。2026-11-19 新板实测：普通 PyPI 无法解析 `torch==2.9.1+cpu`，增加 `--extra-index-url https://download.pytorch.org/whl/cpu` 后在 Python 3.10/aarch64 上安装成功。新板应使用同版本操作系统和匹配的 Python minor，重新创建 venv，并做模块导入及实际推理验证。ARM runtime 的系统动态库见 `../docs/board-snapshot.json`。
 
 复制 `.venv`、Windows Python 或 x86 wheels 不能替代 ARM64 环境准备。

@@ -5,6 +5,7 @@
   "web_password_hash": null,
   "allowed_devices": ["opi5pro-01", "opi5pro-02", "opi5pro-03"],
   "data_dir": "center_data",
+  "ced_model_dir": "../assets/orangepi_ced/ced-mini",
   "list_decision_policy": "rbt3_fusion0715_then_qwen35_2b_clean_v2_q8",
   "max_upload_bytes": 8388608,
   "min_free_gib": 1,

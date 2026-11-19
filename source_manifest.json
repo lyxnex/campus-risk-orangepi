@@ -72,6 +72,10 @@
     "center/set_web_password.py": {
       "sha256": "53686398081d5865a1579749fa91602b86bf08724899b7098f73bf31b9fe1b9e",
       "origin": "current_center_source_20261118"
+    },
+    "center/capture/ced_observer.py": {
+      "sha256": "3ece60dd59db1f9bb595b3cb750bf30641950d5c86028e9f48e848ce454824ff",
+      "origin": "preserved_active_center_CED_observer"
     }
   },
   "qwen_sha256": "415e7a97c4b68ab42e6494d4c17bef887217632e644a206ee61408f2e0bcca98",

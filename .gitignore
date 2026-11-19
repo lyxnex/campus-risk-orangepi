@@ -13,6 +13,7 @@ venv/
 *.pt
 *.pth
 *.bin
+!firmware/esp32s3/*.bin
 *.wav
 *.pcm
 *.flac
@@ -29,6 +30,7 @@ deployment_data*/
 recordings*/
 outbox/
 pairing/
+private/
 connection_backups/
 threshold_backups/
 migration_exports/

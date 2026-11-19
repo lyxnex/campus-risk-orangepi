@@ -13,6 +13,12 @@
       "bytes": 2012012128,
       "sha256": "415e7a97c4b68ab42e6494d4c17bef887217632e644a206ee61408f2e0bcca98",
       "contains": "current clean-v2 Q8 model"
+    },
+    {
+      "name": "ced-mini-assets.zip",
+      "bytes": 7219101,
+      "sha256": "0503837b5a25e4dc4e5b99c81c766bf79d2e981f256af4368ed2e0dfcb3ee5f2",
+      "contains": "PC center CED-mini model and preprocessing files"
     }
   ]
 }

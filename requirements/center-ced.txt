@@ -1,0 +1,4 @@
+# Direct dependencies observed on current Windows Python 3.11 center.
+# Transitive dependencies are resolved by pip; this is not a complete environment lock.
+numpy==2.4.6
+onnxruntime==1.31.0

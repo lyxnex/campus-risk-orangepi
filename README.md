@@ -1,30 +1,48 @@
 # 香橙派校园风险语言检测
 
-这是从已运行版本整理并上传到私人 GitHub 仓库的源码。2026-11-18 已对旧板做只读导出，12 份板端源码与本目录逐文件 SHA256 一致；尚未在全新香橙派上完成安装验收。代码和模型不再训练、合并或转换。
+这是从已运行版本整理到私人 GitHub 仓库的完整**源码与配置流程**。2026-11-18 对旧板做了只读导出，12 份板端源码与本目录逐文件 SHA256 一致；2026-11-19 在第二块同镜像香橙派完成资产核对、依赖安装、麦克风采音、录音推理、中心设备认证和服务自启检查。风险事件上传与网页试听仍待真实候选出现后验收。
 
 ## 当前流程
 
 ESP32S3 USB 有线采音 → SenseVoice 转写/情绪 → RBT3 情绪融合分数 ≥ 0.715 → 微调 Qwen3.5-2B Q8_0 输出布尔风险判断 → 仅风险候选通过 HTTP POST 上传中心 → 网页人工复核。
 
-当前硬件验证对象为香橙派 5 Pro 8 GB、Linux ARM64 / Ubuntu 22.04 / RK3588、同型号 XMOS+ESP32S3 麦克风。采音连接 ESP 的 USB，固件协议 RUSBAUT2。新麦克风尚需各自配置，不能只复制香橙派文件就默认可用。
+当前硬件验证对象为香橙派 5 Pro 8 GB、Linux ARM64 / Ubuntu 22.04 / RK3588、同型号 XMOS+ESP32S3 麦克风。采音连接 ESP 的 USB，固件协议 RUSBAUT2。第二支麦克风已完成固件和现场讲话采集；新增麦克风仍需单独确认身份、刷写并绑定本机串口。
+
+## 师兄从这个链接开始的顺序
+
+1. 请仓库所有者授予此**私人仓库及 Release** 读取权限；下载/克隆源码。三份模型附件在 [v0.1.0-migration Release](https://github.com/lyxnex/campus-risk-orangepi/releases/tag/v0.1.0-migration)，不在普通 Git 文件中。
+2. 在新 Windows 电脑按 [中心与网页配置](docs/CENTER_WINDOWS.md)安装 Python 依赖、核验 CED 模型、生成本现场 token/网页密码和每块板的配对文件，打开本地网页。
+3. 如需新增同型号麦克风，按 [固件与连接](docs/MIC_FIRMWARE.md)验证设备身份并配置 RUSBAUT2；已配置好的麦克风无需重刷。
+4. 每块香橙派按 [新板导入步骤](docs/NEW_BOARD_IMPORT.md)下载两份板端附件、核对哈希、绑定自己的麦克风和配对文件、安装 systemd 服务。
+5. 按 [开发说明](docs/DEVELOPMENT.md)继续添加功能；[逐文件说明](docs/FILE_MAP.md)可定位入口和依赖。
+
+这套流程需要相同系统镜像、可用的 Python/Ubuntu 软件源、设备网络地址与现场独立凭据。仓库不会携带他人的 token、密码、Tailscale 身份或历史录音。当前发布不是无需现场输入的一键离线安装包。
+**代码请取 `main` 分支；`v0.1.0-migration` 页面用于取得模型附件。**该预发行版的自动源码 ZIP 对应较早的标签，不含后来补齐的中心/固件文档。
 
 ## 目录
 
 ```text
 edge/campus_risk_deploy/  已核验的板端 12 份运行模块/提示词
 center/                  当前网页、接收端与本地密码设置工具
+firmware/                ESP32S3 固件源码、四段已验证镜像、刷写工具与清单
 config/                  无实际令牌、地址和麦克风身份的配置示例
-deploy/                  systemd 服务模板
+deploy/                  systemd、Windows 中心启动/自启和受限防火墙脚本
 tools/export_running_board.py  在旧板只读导出当前源码、依赖清单、模型校验信息
 tools/package_board_assets.py  按已导出清单打包非 Qwen 模型与 ARM runtime，不复制录音或 Q8
 tools/verify_assets.py   新板导入后逐文件核对 13 项模型与 runtime
 docs/MIGRATION.md        新板迁移的完整步骤和验收边界
 docs/NEW_BOARD_IMPORT.md 同镜像新板的具体导入命令与独立配置步骤
 docs/GITHUB_UPLOAD.md    GitHub 提交范围和大文件方案
+docs/CENTER_WINDOWS.md   新 Windows 电脑上的中心与网页配置
+docs/MIC_FIRMWARE.md     新麦克风固件和 ESP USB 连接
+docs/FILE_MAP.md         每个仓库文件的职责
+docs/DEVELOPMENT.md      后续开发入口与验证方法
 requirements/README.md   旧板实际依赖导出位置及安装限制
 requirements/edge.lock.txt 旧板 Python 3.10.12 环境的包版本快照
+requirements/center-ced.txt Windows 中心 CED-mini 直接依赖
 assets.lock.json          旧板 13 项模型、tokenizer、ARM runtime 资产的大小和 SHA256
-release_assets.json       私人 Release 两个附件的大小和 SHA256
+release_assets.json       私人 Release 三个附件的大小和 SHA256
+model_manifests/ced-mini.json 中心 CED-mini 模型附件与内部文件校验
 docs/board-snapshot.json  旧板只读导出的源码哈希、平台和 runtime 动态库信息
 source_manifest.json     当前整理源码的 SHA256 和已核验版本
 ```
@@ -35,7 +53,7 @@ source_manifest.json     当前整理源码的 SHA256 和已核验版本
 
 `git clone` 只能得到程序。还需要下载模型及 ARM runtime、重建匹配的 Python 环境、导入本现场的私密配对配置、绑定实际 ESP USB 串口并安装 systemd 服务。详见 [新板导入命令](docs/NEW_BOARD_IMPORT.md)和[迁移验收步骤](docs/MIGRATION.md)。
 
-模型与 runtime 已放入[私人预发行版 v0.1.0-migration](https://github.com/lyxnex/campus-risk-orangepi/releases/tag/v0.1.0-migration)的两个附件，大小和 SHA256 见 `release_assets.json`；不能把 1.9 GB GGUF 直接普通 Git 提交。当前 Q8：
+模型与 runtime 已放入[私人预发行版 v0.1.0-migration](https://github.com/lyxnex/campus-risk-orangepi/releases/tag/v0.1.0-migration)：板端非 Qwen 资产、当前 Q8 GGUF、中心 CED-mini 共三个附件。大小和 SHA256 见 `release_assets.json`；不能把 1.9 GB GGUF 直接普通 Git 提交。当前 Q8：
 
 - 文件：`qwen35_2b_finetuned-Q8_0.gguf`
 - 字节数：`2012012128`
@@ -51,3 +69,13 @@ source_manifest.json     当前整理源码的 SHA256 和已核验版本
 每台新设备需独立设备编号、实际麦克风串口和新状态目录；不要克隆旧板的身份和录音队列。新现场使用新的中心配对凭据。
 
 当前正式交付方向是甲方现场常开 Windows 中心电脑与多台香橙派通过局域网连接，中心地址由现场保留。Tailscale 为可选网络/运维通道，具体地址和账号不写死到源码。
+
+## CED-mini 辅助模型
+
+CED-mini 保留在中心电脑上，源码为 `center/capture/ced_observer.py`，资产校验清单为 `model_manifests/ced-mini.json`，中心直接依赖版本为 `requirements/center-ced.txt`。独立模型附件 `ced-mini-assets.zip` 已上传至同一私人 Release，按清单校验后安装。
+
+CED 对收到的风险候选录音补算 Speech、Music、Shout 等声学事件分数，用于人工复核辅助，不改变 RBT3→Qwen 的风险门控。旧板删除的是未使用的 CED 副本，当前电脑原模型、配置和已有分析结果均保留。
+
+模型 ONNX 大小为 10,890,069 字节，SHA256 为 `2a86374dbe1fa03e96b0acf6a02618ac71852d12aa3d72a030b062ff1e5c5434`。附件四份模型文件均按清单核验。`tools/install_ced_assets.py` 将其放到 `assets/orangepi_ced/ced-mini`；新现场配置放在 `private/center_config.json` 时，生成器会正确写入相对模型路径。
+
+中心环境需要 numpy 与 onnxruntime；上述依赖版本来自当前 Windows Python 3.11，不是新 ARM64 板端的依赖版本。原12MB Windows离线中心原型尚未集成CED及这两项额外依赖，不能把那个旧原型当作完整保留CED的交付包。

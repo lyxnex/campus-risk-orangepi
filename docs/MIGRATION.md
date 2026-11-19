@@ -1,8 +1,8 @@
 # 新香橙派迁移顺序
 
-本目录是整理后的源码，不是已经在新板验收的一键安装器。旧板继续运行，不移动或删除其模型、历史录音、待传队列及私密配置。
+本目录是整理后的源码与可执行导入流程。第二块同镜像新板已完成采集、推理和中心认证；风险候选上传与网页试听仍待实测。旧板继续运行，不移动或删除其模型、历史录音、待传队列及私密配置。
 
-同镜像新板的可执行命令见 [NEW_BOARD_IMPORT.md](NEW_BOARD_IMPORT.md)。
+同镜像新板的可执行命令见 [NEW_BOARD_IMPORT.md](NEW_BOARD_IMPORT.md)。新 Windows 中心和网页见 [CENTER_WINDOWS.md](CENTER_WINDOWS.md)，ESP32S3 固件见 [MIC_FIRMWARE.md](MIC_FIRMWARE.md)。
 
 1. 旧板已运行 `tools/export_running_board.py`：只读导出未停止服务，12 份实际代码与 `source_manifest.json` 一致；Python 版本、依赖和 13 项资产校验信息已纳入仓库。
 2. 从确认的 GitHub 目标获取代码；模型附件单独发布，并逐文件对照 `assets.lock.json` 校验。
@@ -32,4 +32,6 @@
 9. 对照新板用户和路径审查 `deploy/*.service` 后安装 systemd 服务；不能在旧板无条件覆盖已运行的服务。
 10. 验收新板采音 armed、模型 ready、三线程健康、正常聊天本地处理、风险候选中心 ACK、网页音频播放、断网重传和开机恢复。只有通过新板实机验收后才标记可交付。
 
-当前 Windows 中心离线安装原型独立存放在本地历史工作目录的 outputs/customer_lan_delivery，尚未做干净 Windows 的管理员安装/重启验收。这里的 center 源码仍可作为现有中心运行，不需要先安装那份原型。
+旧的 Windows 中心离线安装原型独立存放在历史工作目录，未集成完整 CED 依赖，不能代表本仓库的完整交付。使用本仓库 `center/` 源码、`requirements/center-ced.txt` 与新的中心配置流程；全新 Windows 的管理员防火墙和重启验收仍需现场进行。
+
+CED-mini 辅助分析也需保留：从私人 Release 下载 `ced-mini-assets.zip`，用 `tools/install_ced_assets.py` 核对并放入仓库 `assets/`；中心安装 numpy/onnxruntime，验收产生 `ced_mini.json`。模型和代码均已上传，无须把中心 CED 重新放回板端。

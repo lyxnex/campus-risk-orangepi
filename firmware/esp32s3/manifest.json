@@ -1,0 +1,14 @@
+{
+  "target": "Seeed XIAO ESP32S3, 8 MB flash, XMOS microphone board",
+  "protocol": "RUSBAUT2",
+  "firmware_status": "usb_auto_v2_arq",
+  "arduino_fqbn": "esp32:esp32:XIAO_ESP32S3:PSRAM=opi,USBMode=hwcdc,CDCOnBoot=default",
+  "build_environment_observed": "ESP32 Arduino core 3.3.10-cn, audio-tools 1.2.6",
+  "files": [
+    {"path": "xiao_usb_arq.ino", "bytes": 8436, "sha256": "0cda734a657e04aeeb43b3a50990ae9c244aef7aff194fc948bcc15e4d30653b"},
+    {"path": "xiao_usb_arq.ino.bootloader_flashed.bin", "address": "0x0", "bytes": 19984, "sha256": "3a06e81d78e928687d7acd8abcd069543a4413de4398e2e2940a97b3fc739fd8"},
+    {"path": "xiao_usb_arq.ino.partitions_flashed.bin", "address": "0x8000", "bytes": 3072, "sha256": "1d9cca96de0fe07ad7fc0648b9878ddecd9ce565e38b589ad20fea698ed4c80c"},
+    {"path": "boot_app0_flashed.bin", "address": "0xe000", "bytes": 8192, "sha256": "f94c5d786a7a8fab06ac5d10e33bf37711a6697636dc037559ea19cc410a17f0"},
+    {"path": "xiao_usb_arq.ino_flashed.bin", "address": "0x10000", "bytes": 361744, "sha256": "ec043b26204a4306002d01388d34e59388ebc2ed3294bfc520fef1e4e5d4d705"}
+  ]
+}

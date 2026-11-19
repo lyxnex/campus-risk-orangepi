@@ -4,7 +4,7 @@
 
 ## 取得仓库和附件
 
-仓库 `lyxnex/campus-risk-orangepi` 为私人仓库。每位安装人员需获得仓库读取权限，并在新板配置自己的只读 SSH 凭据；不要复制旧板 SSH 私钥、Tailscale 状态或设备身份。克隆后应核对仓库的 `assets.lock.json`。
+仓库 `lyxnex/campus-risk-orangepi` 为私人仓库。安装人员需获得仓库和 Release 的读取权限；可在新板配置自己的只读 GitHub SSH 凭据，或在已登录 GitHub 的 Windows 电脑克隆后传源码归档。不要复制旧板 SSH 私钥、Tailscale 状态或设备身份。中心和私密配对文件应先按 [CENTER_WINDOWS.md](CENTER_WINDOWS.md)准备；新增麦克风按 [MIC_FIRMWARE.md](MIC_FIRMWARE.md)配置。
 
 从[私人预发行版 `v0.1.0-migration`](https://github.com/lyxnex/campus-risk-orangepi/releases/tag/v0.1.0-migration)取得两个附件：`nonqwen-assets.tar` 和 `qwen35_2b_finetuned-Q8_0.gguf`。可在已登录 GitHub 的电脑下载，再通过 `scp` 传入新板 `/home/orangepi/campus-risk/downloads/`。传输时不要把 GitHub token 放在 URL、命令历史或仓库里。
 
@@ -17,6 +17,8 @@ mkdir -p /home/orangepi/campus-risk/downloads
 cd /home/orangepi/campus-risk
 git clone git@github.com:lyxnex/campus-risk-orangepi.git source
 ```
+
+若新板没有 GitHub SSH 凭据，在 Windows PowerShell 的本地仓库目录执行 `git archive --format=tar --output=source.tar HEAD`，用 `scp .\source.tar orangepi@<新板IP>:/home/orangepi/campus-risk/downloads/` 传入，随后在**新板 SSH** 中运行 `mkdir -p /home/orangepi/campus-risk/source && tar -xf /home/orangepi/campus-risk/downloads/source.tar -C /home/orangepi/campus-risk/source`。传输前后分别计算 SHA256 并核对。Windows `scp` 命令不能在 `orangepi@...$` 中执行。
 
 确认两个附件都已放进 `downloads/` 后，先核对整包 SHA256：
 
@@ -43,12 +45,20 @@ python3 -m venv .venv
 .venv/bin/python -c 'import numpy, sherpa_onnx, torch, transformers, serial; print("PYTHON_IMPORT_OK")'
 mkdir -p qwen35_clean_v2_deploy_20261117
 cp -a source/edge/campus_risk_deploy qwen35_clean_v2_deploy_20261117/
-install -m 600 source/config/edge.example.json qwen35_clean_v2_deploy_20261117/deployment_config.json
 ```
 
 `edge.lock.txt` 是旧板已安装环境的版本快照。新板实测普通 PyPI 不提供 `torch==2.9.1+cpu`，因此安装命令加入 PyTorch 官方 CPU 软件源。若其他 ARM64 wheel 无法取得，应先从可信供应源取得匹配 Python 3.10/aarch64 的包，并验证实际导入和推理，不能复制旧板 `.venv` 代替安装。
 
-编辑新板私密 `deployment_config.json`：为每台板指定唯一 `device_id`、`scene_id`、`scene_name`、新 `state_dir` 和本板 `/dev/serial/by-id/` 中的实际 ESP USB 串口；填写本现场的 `center_url` 与共享上传 token。保持策略 `rbt3_fusion0715_then_qwen35_2b_clean_v2_q8`、阈值 `0.715`、Qwen 2 线程、2048 上下文和原有温度/内存保护。不要提交该配置，也不要复制旧板的录音、队列或 ESP 全 flash 身份。
+在新板执行 `ls -l /dev/serial/by-id/`，把本板实际 ESP USB 串口填入中心生成的 `private/pairing/<device-id>.json` 的 `port`。在 Windows PowerShell 用 `scp` 将该文件传到新板 `downloads/`，再在新板运行：
+
+```bash
+cd /home/orangepi/campus-risk
+mkdir -p qwen35_clean_v2_deploy_20261117
+install -m 600 downloads/<device-id>.json qwen35_clean_v2_deploy_20261117/deployment_config.json
+rm downloads/<device-id>.json
+```
+
+将 `<device-id>` 替换为该板编号。核对私密配置中每台板唯一的 `device_id`、`scene_id`、`scene_name`、`state_dir`，以及本现场的 `center_url`、token 和串口。保持策略 `rbt3_fusion0715_then_qwen35_2b_clean_v2_q8`、阈值 `0.715`、Qwen 2 线程、2048 上下文和原有温度/内存保护。不要提交该配置，也不要复制旧板的录音、队列或 ESP 全 flash 身份。
 
 ## 接入中心并安装服务
 
