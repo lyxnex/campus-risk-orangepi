@@ -1,6 +1,6 @@
 # 全新香橙派 5 Pro 导入步骤
 
-适用：同型号 8 GB 香橙派 5 Pro、同一 `Orangepi5pro_1.0.6_ubuntu_jammy_server_linux5.10.160.img` 镜像、独立 ESP32S3 麦克风。旧板无需停止服务或搬走模型、录音、队列。本步骤尚待新板实机验收。
+适用：同型号 8 GB 香橙派 5 Pro、同一 `Orangepi5pro_1.0.6_ubuntu_jammy_server_linux5.10.160.img` 镜像、独立 ESP32S3 麦克风。旧板无需停止服务或搬走模型、录音、队列。2026-11-19 已在第二块新板实测资产核对、依赖安装、麦克风采集、推理初始化和中心设备认证。
 
 ## 取得仓库和附件
 
@@ -62,3 +62,5 @@ systemctl show campus-risk-qwen35-clean-v2.service -p ActiveState -p SubState
 ```
 
 服务模板使用 `orangepi` 用户、CPU 亲和 4/5 和固定目录；若新板用户名或安装目录不同，先调整模板。最终需在新板实测 `capture=armed`、`inference=ready`、中心收到风险候选 ACK、网页音频可播放、断网重传和开机恢复；仅安装成功不算端到端验收。
+
+第二块新板实测达到 `active/running`、`capture=armed`、`inference=ready`，一次现场讲话产生录音并完成推理，中心 `/api/device-check` 使用新板凭据返回成功。该次普通讲话未生成风险候选，故风险候选上传 ACK、网页音频、断网重传和重启恢复仍需分别实测。
