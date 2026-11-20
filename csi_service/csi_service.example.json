@@ -1,0 +1,13 @@
+{
+  "port": "auto",
+  "baud": 2000000,
+  "out_dir": "/home/orangepi/csi-data/csi_samples",
+  "status_file": "/home/orangepi/csi-data/status.json",
+  "sample_seconds": 3.0,
+  "hop_seconds": 2.5,
+  "stall_seconds": 5.0,
+  "min_free_gib": 1.0,
+  "resume_free_gib": 2.0,
+  "retention_hours": 0,
+  "metrics_every": 30
+}

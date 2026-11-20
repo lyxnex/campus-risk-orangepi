@@ -1,0 +1,20 @@
+[Unit]
+Description=CSI serial capture service (ESP32 CH343 -> 3s sliding-window samples)
+# 与 campus-risk 音频服务（campus-risk-qwen35-clean-v2）完全独立：
+# 无依赖关系，各自启停/更新互不影响。
+
+[Service]
+Type=simple
+User=orangepi
+# 路径按实际安装位置修改：csi_service/ 整体拷贝到哪里，这里就指向哪里。
+# python 用本目录独立 venv（安装步骤见本目录 README.md）。
+ExecStart=/home/orangepi/campus-risk-orangepi/csi_service/.venv/bin/python -u /home/orangepi/campus-risk-orangepi/csi_service/csi_capture.py --config /home/orangepi/campus-risk-orangepi/csi_service/csi_service.json
+# stall/崩溃退出后 5 秒重启 = 拔设备自动重连（与采集内建重连语义一致）
+Restart=on-failure
+RestartSec=5
+KillSignal=SIGINT
+TimeoutStopSec=20
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target
